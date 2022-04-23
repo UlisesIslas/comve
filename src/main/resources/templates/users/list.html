@@ -21,10 +21,84 @@
 </head>
 
 <body>
-  <!--<div th:insert="~{fragments/header :: header}"></div>-->
-
+  <div th:insert="~{fragments/header :: header}"></div>
   <div class="container">
-    
+    <div class="card">
+      <div class="card-header">LISTADO DE USUARIOS</div>
+      <div class="card-body">
+        <div class="col d-flex justify-content-between bg-white border-bottom mb-2">
+          <h5 class="card-title">Usuarios</h5>
+          <div class="text-end">
+            <a th:href="@{/users/create}" class="btn btn-primary mb-3">
+              <ion-icon name="pencil"></ion-icon>&nbsp;<span class="d-sm-none d-md-none d-lg-inline d-xl-inline"> NUEVO
+                ENLACE</span>
+            </a>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12 mx-auto table-responsive">
+            <table class="table table-hover table-collapse mt-3 mytable" id="states">
+              <thead>
+                <th scope="col">#</th>
+                <th scope="col">Nombre</th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Correo Electrónico</th>
+                <th scope="col">Fecha de Registro</th>
+                <th scope="col">Rol</th>
+                <th scope="col">Acciones</th>
+              </thead>
+              <tbody>
+                <tr th:each="tmpUser, iter : ${listUsers}">
+                  <td th:text="${iter.index + 1}"></td>
+                  <td th:text="${tmpUser.name}"></td>
+                  <td th:text="${tmpUser.username}"></td>
+                  <td th:text="${tmpUser.email}"></td>
+                  <td th:text="${tmpUser.registeredDate}"></td>
+                  <td th:text="${tmpUser.roles[0].authority.replace('ROL_', '')}"></td>
+                  <td>
+                    <div class="text-end">
+                      <div th:switch="${tmpUser.enabled}">
+                        <div th:case="${'1'}">
+                          <a th:href="@{/users/disable/{id} (id=${tmpUser.id})}" class="btn btn-danger mb-3">
+                            <ion-icon name="close-circle"></ion-icon>
+                          </a>
+                        </div>
+                        <div th:case="${'0'}">
+                          <a th:href="@{/users/disable/{id} (id=${tmpUser.id})}" class="btn btn-success mb-3">
+                            <ion-icon name="checkmark-circle"></ion-icon>
+                          </a>
+                        </div>
+                      </div>
+                      <a th:href="@{/users/edit/{id} (id=${tmpUser.id})}" class="btn btn-primary mb-3">
+                        <ion-icon name="create-outline"></ion-icon>
+                      </a>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <nav th:if="${listUsers.totalPages > 0}" aria-label="Page navigation example">
+              <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${listUsers.number == 0 ? 'disabled' : ''}">
+                  <a th:href="@{/president/list(page=${listUsers.number - 1})}" class="page-link">Anterior</a>
+                </li>
+
+                <li class="page-item" th:classappend="${i eq listUsers.number + 1} ? 'active'"
+                  th:each="i : ${#numbers.sequence( 1, listUsers.totalPages, 1)}">
+                  <a class="page-link" th:href="@{/president/list?page={tmpPag} (tmpPag=${i-1}) }" th:text="${i}"
+                    th:title="${'Page '+ i}" data-toggle="tooltip"></a>
+                </li>
+                <li class="page-item"
+                  th:classappend="${listUsers.number == (listUsers.totalPages - 1) ? 'disabled' : ''}">
+                  <a th:href="@{/users/list(page=${listUsers.number + 1})}" class="page-link">Siguiente</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+        </div>
+      </div>
+      <div class="card-footer"></div>
+    </div>
   </div>
   <!-- <script th:src="@{/js/bootstrap.min.js}"></script> -->
   <!--Ionicons-->
