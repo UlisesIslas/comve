@@ -23,9 +23,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.comverecu.entity.Commentary;
 import mx.edu.utez.comverecu.entity.CommitteePresident;
 import mx.edu.utez.comverecu.entity.Request;
 import mx.edu.utez.comverecu.entity.RequestAttachment;
+import mx.edu.utez.comverecu.entity.Roles;
 import mx.edu.utez.comverecu.entity.Users;
 import mx.edu.utez.comverecu.entity.DataTransferObject.RequestDto;
 import mx.edu.utez.comverecu.security.BlacklistController;
@@ -92,7 +94,7 @@ public class RequestControllerPresident {
         } else {
             return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
         }
-    }
+    }*/
 
     @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
     public String showRequestDetails(@PathVariable("id") long id, Authentication authentication, HttpSession session,
@@ -103,8 +105,8 @@ public class RequestControllerPresident {
         session.setAttribute("user", user);
         model.addAttribute("request", requestService.findById(id));
         model.addAttribute("attachment", attachmentsService.findByRequestId(id));
-        return "requests/president/details";
-    }*/
+        return "president-request/details";
+    }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String listAllPresidentRequests(Authentication authentication, HttpSession session, Model model,
@@ -183,35 +185,35 @@ public class RequestControllerPresident {
         }
     }
 
-    /*@RequestMapping(value = "/commentary/{id}", method = RequestMethod.GET)
+    @RequestMapping(value = "/commentary/{id}", method = RequestMethod.GET)
     public String chat(@PathVariable("id") long id, Authentication authentication, HttpSession session, Model model,
-            RedirectAttributes redirectAttributes, CommentaryObject commentaryObject) {
+            RedirectAttributes redirectAttributes, Commentary commentary) {
         Users user = usersService.findByUsername(authentication.getName());
         user.setPassword(null);
         session.setAttribute("user", user);
         model.addAttribute("listComents", commentaryService.findAllByRequestId(id));
         model.addAttribute("request", requestService.findById(id));
-        return "requests/president/comments";
+        return "president-request/comments";
     }
 
     @RequestMapping(value = "/commentary/save/{id}", method = RequestMethod.POST)
-    public String saveCommentary(Model model, CommentaryObject commentaryObject, Authentication authentication,
+    public String saveCommentary(Model model, Commentary commentary, Authentication authentication,
             HttpSession session, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
         Users user = usersService.findByUsername(authentication.getName());
         user.setPassword(null);
         session.setAttribute("user", user);
-        commentaryObject.setRequest(requestService.findById(id));
-        if (!BlacklistController.checkBlacklistedWords(commentaryObject.getContent())) {
+        commentary.setRequest(requestService.findById(id));
+        if (!BlacklistController.checkBlacklistedWords(commentary.getContent())) {
             Users tmp = usersService.findById(user.getId());
             tmp.setPassword(usersService.findPasswordById(tmp.getId()));
             Roles tmpRole = (Roles) tmp.getRoles().toArray()[0];
             if (tmpRole.getAuthority().equals("ROL_PRESIDENTE")) {
-                commentaryObject.setAutor("Presidente");
+                commentary.setAutor("Presidente");
             } else {
-                commentaryObject.setAutor("Enlace");
+                commentary.setAutor("Enlace");
             }
-            commentaryObject.setId(null);
-            boolean res = commentaryService.save(commentaryObject);
+            commentary.setId(null);
+            boolean res = commentaryService.save(commentary);
             if (res) {
                 redirectAttributes.addFlashAttribute("msg_success", "Comentario publicado");
             } else {
@@ -221,6 +223,6 @@ public class RequestControllerPresident {
             redirectAttributes.addFlashAttribute("msg_error", "Ingresó una o más palabras prohibidas.");
         }
         return ("redirect:/president/commentary/" + id);
-    }*/
+    }
 
 }
