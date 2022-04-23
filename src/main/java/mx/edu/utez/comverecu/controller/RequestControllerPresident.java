@@ -32,6 +32,7 @@ import mx.edu.utez.comverecu.entity.Users;
 import mx.edu.utez.comverecu.entity.DataTransferObject.RequestDto;
 import mx.edu.utez.comverecu.security.BlacklistController;
 import mx.edu.utez.comverecu.service.CategoryService;
+import mx.edu.utez.comverecu.service.CityLinkService;
 import mx.edu.utez.comverecu.service.CommentaryService;
 import mx.edu.utez.comverecu.service.CommitteePresidentService;
 import mx.edu.utez.comverecu.service.RequestAttachmentsService;
@@ -67,12 +68,12 @@ public class RequestControllerPresident {
         Users user = usersService.findByUsername(authentication.getName());
         user.setPassword(null);
         session.setAttribute("user", user);
-        CommitteePresident president = presidentService.findByUser(user.getId());
-        model.addAttribute("unpaidList", requestService.findAllUnpaidByCommitteeId(president.getCommittee().getId()));
-        return "requests/president/unpaidList";
+        user.setPassword(usersService.findPasswordById(user.getId()));
+        model.addAttribute("unpaidList", requestService.findAllUnpaidByCommitteeId(presidentService.findByUser(user.getId()).getCommittee().getId()));
+        return "president-request/unpaidList";
     }
 
-    /*@RequestMapping(value = "/pay/{id}/{status}", method = RequestMethod.GET)
+    @RequestMapping(value = "/pay/{id}/{status}", method = RequestMethod.GET)
     public ResponseEntity<Object> payRequest(@PathVariable("id") long id, @PathVariable("status") String status,
             RedirectAttributes redirectAttributes) {
         Map<String, Object> data = new HashMap<>();
@@ -94,7 +95,7 @@ public class RequestControllerPresident {
         } else {
             return new ResponseEntity<>(data, HttpStatus.BAD_REQUEST);
         }
-    }*/
+    }
 
     @RequestMapping(value = "/details/{id}", method = RequestMethod.GET)
     public String showRequestDetails(@PathVariable("id") long id, Authentication authentication, HttpSession session,
