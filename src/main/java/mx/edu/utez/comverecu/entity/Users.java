@@ -34,7 +34,7 @@ public class Users implements Serializable {
     @NotBlank(message = "El nombre no puede estar vacío")
     private String name;
 
-    @Column(name = "latname", length = 150, nullable = false)
+    @Column(name = "lastname", length = 150, nullable = false)
     @Size(min = 2, message = "El primer apellido debe tener mínimo 2 caracteres")
     @Size(max = 150, message = "El primer apellido debe tener máximo 150 caracteres")
     @NotBlank(message = "El primer apellido no puede estar vacío")
