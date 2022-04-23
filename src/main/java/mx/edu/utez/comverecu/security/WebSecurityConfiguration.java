@@ -23,13 +23,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
     private SimpleAuthenticationSuccessHandler successHandler;
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.jdbcAuthentication().dataSource(dataSource)
-        .usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
-        .authoritiesByUsernameQuery("SELECT u.username, r.authority FROM user_role AS ur "
-        + "INNER JOIN users AS u ON u.id = ur.user "
-        + "INNER JOIN roles AS r.ON r.id = ur.role WHERE u.username = ?");
-    }
+	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+		auth.jdbcAuthentication().dataSource(dataSource)
+				.usersByUsernameQuery("SELECT username, password, enabled FROM users WHERE username = ?")
+				.authoritiesByUsernameQuery("SELECT u.username, r.authority FROM user_role AS ur "
+						+ "INNER JOIN users AS u ON u.id = ur.user "
+						+ "INNER JOIN roles AS r ON r.id = ur.role WHERE u.username = ?");
+	}
 
     @Override
     public void configure(HttpSecurity httpSecurity) throws Exception {
