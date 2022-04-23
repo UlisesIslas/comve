@@ -10,7 +10,6 @@ public class BlacklistController {
         if (!word.equals(null)) {
             for (int i = 0; i < blacklist.length; i++) {
                 if (word.toUpperCase().contains(blacklist[i])) {
-                    System.out.println(blacklist[i]);
                     return true;
                 }
             }

@@ -15,6 +15,7 @@ import mx.edu.utez.comverecu.entity.CommitteePresident;
 import mx.edu.utez.comverecu.entity.Users;
 import mx.edu.utez.comverecu.entity.DataTransferObject.PresidentDto;
 import mx.edu.utez.comverecu.security.BlacklistController;
+import mx.edu.utez.comverecu.service.CityLinkService;
 import mx.edu.utez.comverecu.service.CommitteePresidentService;
 import mx.edu.utez.comverecu.service.CommitteeService;
 import mx.edu.utez.comverecu.service.RolesService;
@@ -39,13 +40,16 @@ public class CommitteePresidentController {
     @Autowired
     private RolesService rolesService;
 
+    @Autowired
+    private CityLinkService linkService;
+
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String list(Model model, RedirectAttributes redirectAttributes, Authentication authentication,
             HttpSession session) {
         Users user = userService.findByUsername(authentication.getName());
         user.setPassword(null);
         session.setAttribute("user", user);
-        model.addAttribute("listUsers", presidentService.listPagination(user.getId()));
+        model.addAttribute("listUsers", presidentService.listPagination(linkService.findByUserId(user.getId()).getCity().getId()));
         return "committee_president/list";
     }
 

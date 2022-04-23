@@ -54,14 +54,21 @@ public class SuburbController {
         user.setPassword(null);
         session.setAttribute("user", user);
         model.addAttribute("listCities",
-                cityService.findAllCitiesByStateId(linkService.findOne(user.getId()).getCity().getState().getId()));
+                cityService
+                        .findAllCitiesByStateId(linkService.findByUserId(user.getId()).getCity().getState().getId()));
         return "suburb/create";
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String save(Model model, RedirectAttributes redirectAttributes, Suburb suburb) {
+    public String save(Model model, RedirectAttributes redirectAttributes, Suburb suburb, Authentication authentication,
+            HttpSession session) {
+        Users user = userService.findByUsername(authentication.getName());
+        user.setPassword(null);
+        session.setAttribute("user", user);
+        user.setPassword(userService.findPasswordById(user.getId()));
         if (!(BlacklistController.checkBlacklistedWords(suburb.getName())
                 || BlacklistController.checkBlacklistedWords(suburb.getPostalCode()))) {
+            suburb.setCity(linkService.findByUserId(user.getId()).getCity());
             boolean res = suburbService.save(suburb);
             if (res) {
                 model.addAttribute("msg_success", "Se registró la colonia correctamente");
