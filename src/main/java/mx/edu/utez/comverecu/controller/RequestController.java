@@ -15,12 +15,15 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
+import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 
+@Controller
+@RequestMapping(value = "/request")
 public class RequestController {
 
     @Autowired
@@ -75,8 +78,26 @@ public class RequestController {
 
     }*/
 
-    @GetMapping(value = "/list")
-    public String findAll(Model model, RedirectAttributes redirectAttributes, Pageable pageable) {
+    @PostMapping(value = "/update")
+    public String actualizar(@ModelAttribute("request") Request request, Model modelo,
+                             RedirectAttributes redirectAttributes) {
+        Request obj = requestService.findById(request.getId());
+        if (!BlacklistController.checkBlacklistedWords(obj.getDescription())) {
+            obj.setPaymentAmount(request.getPaymentAmount());
+            if (obj != null) {
+                requestService.save(obj);
+                modelo.addAttribute("listRequests", requestService.findAll());
+            }
+            return "redirect:/request/list";
+        } else {
+            redirectAttributes.addFlashAttribute("msg_error", "Ingresó una o más palabras prohibidas.");
+            return "redirect:/request/list";
+        }
+
+    }
+
+    @RequestMapping(value = "/list", method = RequestMethod.GET)
+    public String findAll(Model model, Pageable pageable) {
         Page<Request> listRequests = requestService
                 .listarPaginacion(PageRequest.of(pageable.getPageNumber(), 2, Sort.by("startDate").descending()));
         model.addAttribute("listRequests", listRequests);
@@ -84,6 +105,7 @@ public class RequestController {
     }
 
     @GetMapping("/create")
+
     public String create(Request request, Model modelo) {
         modelo.addAttribute("listRequests", requestService.findAll());
         return "requests/amountRequests";

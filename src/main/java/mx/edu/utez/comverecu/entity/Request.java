@@ -51,7 +51,7 @@ public class Request implements Serializable {
     private int paymentStatus;
 
     @Column(name = "payment_amount", nullable = true)
-    private double paymentAmount;
+    private Double paymentAmount;
 
     @Column(name = "status", nullable = false)
     @NotNull(message = "El estatus no puede estar vacío")
@@ -110,11 +110,11 @@ public class Request implements Serializable {
         this.paymentStatus = paymentStatus;
     }
 
-    public double getPaymentAmount() {
+    public Double getPaymentAmount() {
         return paymentAmount;
     }
 
-    public void setPaymentAmount(double paymentAmount) {
+    public void setPaymentAmount(Double paymentAmount) {
         this.paymentAmount = paymentAmount;
     }
 
