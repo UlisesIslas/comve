@@ -2,6 +2,7 @@ package mx.edu.utez.comverecu.entity;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -46,7 +47,7 @@ public class Users implements Serializable {
 
     @Column(name = "username", nullable = false, unique = true, length = 150)
     @Size(min = 2, message = "El nombre de usuario debe tener mínimo 2 caracteres")
-    @Size(min = 150, message = "El nombre de usuario debe tener máximo 150 caracteres")
+    @Size(max = 150, message = "El nombre de usuario debe tener máximo 150 caracteres")
     @NotBlank(message = "El nombre de usuario no puede estar vacío")
     private String username;
 
@@ -173,5 +174,21 @@ public class Users implements Serializable {
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
+
+    public void addRole(Roles role) {
+        if (roles == null) {
+            roles = new HashSet<Roles>();
+        }
+        roles.add(role);
+    }
+
+    @Override
+    public String toString() {
+        return "Users [email=" + email + ", enabled=" + enabled + ", id=" + id + ", lastname=" + lastname + ", name="
+                + name + ", password=" + password + ", phone=" + phone + ", registeredDate=" + registeredDate
+                + ", roles=" + "aaa" + ", surname=" + surname + ", username=" + username + "]";
+    }
+
+    
     
 }

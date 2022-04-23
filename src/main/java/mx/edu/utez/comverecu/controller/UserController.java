@@ -16,10 +16,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import mx.edu.utez.comverecu.entity.CityLink;
 import mx.edu.utez.comverecu.entity.Users;
+import mx.edu.utez.comverecu.entity.DataTransferObject.UserDto;
+import mx.edu.utez.comverecu.security.BlacklistController;
 import mx.edu.utez.comverecu.service.CityLinkService;
+import mx.edu.utez.comverecu.service.CityService;
 import mx.edu.utez.comverecu.service.RolesService;
-import mx.edu.utez.comverecu.service.SuburbService;
 import mx.edu.utez.comverecu.service.UserService;
 
 @Controller
@@ -39,14 +42,14 @@ public class UserController {
     private CityLinkService linkService;
 
     @Autowired
-    private SuburbService suburbService;
+    private CityService cityService;
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
     public String findAll(Model model, Pageable pageable) {
         Page<Users> listUsers = userService
         .listPagination(PageRequest.of(pageable.getPageNumber(), 10, Sort.by("id").descending()));
         model.addAttribute("listUsers", listUsers);
-        return "users/listUser";
+        return "users/list";
     }
 
     @RequestMapping(value = "/find/{id}", method = RequestMethod.GET)
@@ -61,9 +64,45 @@ public class UserController {
     }
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public String create(Users user, Model modelo) {
-        modelo.addAttribute("listSuburbs", suburbService.findAll());
+    public String create(UserDto userDto, Model modelo) {
+        modelo.addAttribute("listCities", cityService.findAll());
         return "users/create";
+    }
+
+    @RequestMapping(value = "/signup", method = RequestMethod.POST)
+    public String signup(UserDto userDto, Model model, RedirectAttributes redirectAttributes) {
+        if (!(BlacklistController.checkBlacklistedWords(userDto.getName()) || BlacklistController.checkBlacklistedWords(userDto.getLastname()) || BlacklistController.checkBlacklistedWords(userDto.getUsername()) || BlacklistController.checkBlacklistedWords(userDto.getPhone()) || BlacklistController.checkBlacklistedWords(userDto.getPassword()))) {
+            if (!linkService.hasCityLink(userDto.getCity())) {
+                Users obj = new Users();
+                obj.setName(userDto.getName());
+                obj.setLastname(userDto.getLastname());
+                obj.setSurname(userDto.getSurname());
+                obj.setUsername(userDto.getUsername());
+                obj.setPhone(userDto.getPhone());
+                obj.setEmail(userDto.getEmail());
+                obj.setPassword(passwordEncoder.encode(userDto.getPassword()));
+                obj.addRole(rolesService.findByAuthority("ROL_ENLACE"));
+                
+                boolean res = userService.save(obj);
+
+                CityLink tmpLink = new CityLink();
+                tmpLink.setCity(cityService.findOne(userDto.getCity()));
+                tmpLink.setUser(obj);
+                boolean res2 = linkService.save(tmpLink); 
+                if (res && res2) {
+                    redirectAttributes.addFlashAttribute("msg_success", "Enlace registrado correctamente, Ahora puede iniciar sesión con este usuario");
+                    return "redirect:/users/list";
+                } else {
+                    redirectAttributes.addFlashAttribute("msg_error", "Ocurrió un error al registrar al Enlace");
+                }
+            } else {
+                redirectAttributes.addFlashAttribute("msg_error", "El municipio ya tiene un enlace asignado");
+            }
+        } else {
+            redirectAttributes.addFlashAttribute("msg_error", "Ungresó una o más palabras prohibidas");
+        }
+        
+        return "redirect:/users/create";
     }
 
     @RequestMapping(value = "/disable/{id}", method = RequestMethod.GET)

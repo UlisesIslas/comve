@@ -18,7 +18,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-@Table(name = "city_link")
+@Table(name = "commentary")
 public class Commentary implements Serializable {
 
     @Id

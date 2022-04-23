@@ -18,6 +18,14 @@ public class CityLinkService {
         return linkRepository.findAll();
     }
 
+    public boolean hasCityLink(long id) {
+        if (linkRepository.totalCityLinkCountByCityId(id) > 0) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public CityLink findOne(long id) {
         return linkRepository.getById(id);
     }
