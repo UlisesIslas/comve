@@ -15,5 +15,7 @@ public interface ICommitteePresidentRepository extends JpaRepository<CommitteePr
 
     @Query(value = "SELECT COUNT(*) FROM committee_president cp WHERE cp.committee = :id", nativeQuery = true)
     public long totalCommitteePresidentCountByCommitteeId(@Param("id") long id);
+
+    public CommitteePresident findByUserId(long id);
     
 }

@@ -18,6 +18,10 @@ public class CommitteePresidentService {
         return presidentRepository.findAll();
     }
 
+    public CommitteePresident findByUser(long id) {
+        return presidentRepository.findByUserId(id);
+    }
+
     public boolean hasPresident(long id) {
         return presidentRepository.totalCommitteePresidentCountByCommitteeId(id) > 0 ? true : false;
     }
