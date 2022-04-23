@@ -45,7 +45,8 @@
                         <thead>
                         <tr>
                             <th>#</th>
-                            <th>estatus</th>
+                            <th>Nombre</th>
+                            <th>Estatus</th>
                             <th>Estado</th>
                             <th>Municipio</th>
                             <th>Suburbio</th>
@@ -53,8 +54,9 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="committee: ${listCommittees}">
-                            <td>[[${committee.id}]]</td>
+                        <tr th:each="committee, iter: ${listCommittees}">
+                            <td th:text="${iter.index+1}"></td>
+                            <td th:text="${committee.name}"></td>
                             <td  th:switch="${committee.status}">
 
                                 <div th:case="'1'">
@@ -73,12 +75,6 @@
                                     <a   class="btn btn-primary" th:href="@{/committee/update/{id} (id=${committee.id})}">
                                         <ion-icon name="create-outline"></ion-icon><span
                                             class="d-sm-none d-md-none d-lg-inline d-xl-inline">Actualizar</span>
-                                    </a>
-                                    <a   th:href="@{/committee/details/{id} (id=${committee.id})}" class="btn btn-warning " data-bs-toggle="modal" data-bs-target="#detailsPayment">
-                                        <ion-icon name="eye"></ion-icon>&nbsp;<span class="d-sm-none d-md-none d-lg-inline d-xl-inline"> Detalles</span>
-                                    </a>
-                                    <a  th:href="@{/committee/delete/{id} (id=${committee.id})}" class="btn btn-danger " data-bs-toggle="modal" data-bs-target="#detailsPayment">
-                                        <ion-icon name="trash"></ion-icon>&nbsp;<span class="d-sm-none d-md-none d-lg-inline d-xl-inline"> Eliminar</span>
                                     </a>
                                 </div>
                             </td>

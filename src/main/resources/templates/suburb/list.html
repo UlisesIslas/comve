@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Usuarios</title>
+  <title>Colonias</title>
   <link rel="stylesheet" th:href="@{/css/toast.min.css}" />
   <!-- <link rel="stylesheet" th:href="@{/css/datatables.min.css}" /> -->
   <link rel="stylesheet" href="//cdn.datatables.net/1.11.3/css/jquery.dataTables.min.css">
@@ -24,14 +24,14 @@
   <div th:insert="~{fragments/header :: header}"></div>
   <div class="container">
     <div class="card">
-      <div class="card-header">LISTADO DE USUARIOS</div>
+      <div class="card-header">LISTADO DE COLONIAS</div>
       <div class="card-body">
         <div class="col d-flex justify-content-between bg-white border-bottom mb-2">
-          <h5 class="card-title">Usuarios</h5>
+          <h5 class="card-title">Colonias</h5>
           <div class="text-end">
-            <a th:href="@{/users/create}" class="btn btn-primary mb-3">
-              <ion-icon name="pencil"></ion-icon>&nbsp;<span class="d-sm-none d-md-none d-lg-inline d-xl-inline"> NUEVO
-                ENLACE</span>
+            <a th:href="@{/suburb/create}" class="btn btn-primary mb-3">
+              <ion-icon name="pencil"></ion-icon>&nbsp;<span class="d-sm-none d-md-none d-lg-inline d-xl-inline"> NUEVA
+                COLONIA</span>
             </a>
           </div>
         </div>
@@ -41,35 +41,19 @@
               <thead>
                 <th scope="col">#</th>
                 <th scope="col">Nombre</th>
-                <th scope="col">Usuario</th>
-                <th scope="col">Correo Electrónico</th>
-                <th scope="col">Fecha de Registro</th>
-                <th scope="col">Rol</th>
+                <th scope="col">Municipio</th>
+                <th scope="col">Código Postal</th>
                 <th scope="col">Acciones</th>
               </thead>
               <tbody>
-                <tr th:each="tmpUser, iter : ${listUsers}">
+                <tr th:each="tmpSuburb, iter : ${listSuburbs}">
                   <td th:text="${iter.index + 1}"></td>
-                  <td th:text="${tmpUser.name}"></td>
-                  <td th:text="${tmpUser.username}"></td>
-                  <td th:text="${tmpUser.email}"></td>
-                  <td th:text="${tmpUser.registeredDate}"></td>
-                  <td th:text="${tmpUser.roles[0].authority.replace('ROL_', '')}"></td>
+                  <td th:text="${tmpSuburb.name}"></td>
+                  <td th:text="${tmpSuburb.city.name}"></td>
+                  <td th:text="${tmpSuburb.postalCode}"></td>
                   <td>
                     <div class="text-end">
-                      <div th:switch="${tmpUser.enabled}">
-                        <div th:case="${'1'}">
-                          <a th:href="@{/users/disable/{id} (id=${tmpUser.id})}" class="btn btn-danger mb-3">
-                            <ion-icon name="close-circle"></ion-icon>
-                          </a>
-                        </div>
-                        <div th:case="${'0'}">
-                          <a th:href="@{/users/disable/{id} (id=${tmpUser.id})}" class="btn btn-success mb-3">
-                            <ion-icon name="checkmark-circle"></ion-icon>
-                          </a>
-                        </div>
-                      </div>
-                      <a th:href="@{/users/edit/{id} (id=${tmpUser.id})}" class="btn btn-primary mb-3">
+                      <a th:href="@{/suburb/edit/{id} (id=${tmpSuburb.id})}" class="btn btn-primary mb-3">
                         <ion-icon name="create-outline"></ion-icon>
                       </a>
                     </div>
@@ -77,20 +61,20 @@
                 </tr>
               </tbody>
             </table>
-            <nav th:if="${listUsers.totalPages > 0}" aria-label="Page navigation example">
+            <nav th:if="${listSuburbs.totalPages > 0}" aria-label="Page navigation example">
               <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${listUsers.number == 0 ? 'disabled' : ''}">
-                  <a th:href="@{/users/list(page=${listUsers.number - 1})}" class="page-link">Anterior</a>
+                <li class="page-item" th:classappend="${listSuburbs.number == 0 ? 'disabled' : ''}">
+                  <a th:href="@{/suburb/list(page=${listSuburbs.number - 1})}" class="page-link">Anterior</a>
                 </li>
 
-                <li class="page-item" th:classappend="${i eq listUsers.number + 1} ? 'active'"
-                  th:each="i : ${#numbers.sequence( 1, listUsers.totalPages, 1)}">
-                  <a class="page-link" th:href="@{/users/list?page={tmpPag} (tmpPag=${i-1}) }" th:text="${i}"
+                <li class="page-item" th:classappend="${i eq listSuburbs.number + 1} ? 'active'"
+                  th:each="i : ${#numbers.sequence( 1, listSuburbs.totalPages, 1)}">
+                  <a class="page-link" th:href="@{/suburb/list?page={tmpPag} (tmpPag=${i-1}) }" th:text="${i}"
                     th:title="${'Page '+ i}" data-toggle="tooltip"></a>
                 </li>
                 <li class="page-item"
-                  th:classappend="${listUsers.number == (listUsers.totalPages - 1) ? 'disabled' : ''}">
-                  <a th:href="@{/users/list(page=${listUsers.number + 1})}" class="page-link">Siguiente</a>
+                  th:classappend="${listSuburbs.number == (listSuburbs.totalPages - 1) ? 'disabled' : ''}">
+                  <a th:href="@{/suburb/list(page=${listSuburbs.number + 1})}" class="page-link">Siguiente</a>
                 </li>
               </ul>
             </nav>

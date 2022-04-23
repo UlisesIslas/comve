@@ -1,19 +1,26 @@
 package mx.edu.utez.comverecu.controller;
 
+import mx.edu.utez.comverecu.service.CityLinkService;
 import mx.edu.utez.comverecu.service.CityService;
 import mx.edu.utez.comverecu.service.StateService;
 import mx.edu.utez.comverecu.service.SuburbService;
+import mx.edu.utez.comverecu.service.UserService;
+
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import mx.edu.utez.comverecu.entity.Committee;
+import mx.edu.utez.comverecu.entity.Users;
 import mx.edu.utez.comverecu.service.CommitteeService;
 
 @Controller
@@ -31,6 +38,12 @@ public class CommitteeController {
     @Autowired
     private StateService stateService;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private CityLinkService linkService;
+
     @GetMapping(value = "/list")
     public String findAll(Model model, Pageable pageable) {
         Page<Committee> listCommittees = committeeService.listarPaginacion(PageRequest.of(pageable.getPageNumber(), 4, Sort.by("id").ascending()));
@@ -41,8 +54,11 @@ public class CommitteeController {
 
 
     @GetMapping("/create")
-    public String createCommittee(Committee committee, Model model) {
-        model.addAttribute("listCities", cityService.findAll());
+    public String createCommittee(Committee committee, Model model, Authentication authentication, HttpSession session) {
+        Users user = userService.findByUsername(authentication.getName());
+        user.setPassword(null);
+        session.setAttribute("user", user);
+        model.addAttribute("listCities", cityService.findAllCitiesByStateId(linkService.findOne(user.getId()).getCity().getState().getId()));
         model.addAttribute("listSuburbs", suburbService.findAll());
         model.addAttribute("listStates", stateService.findAll());
         return "committee/create";

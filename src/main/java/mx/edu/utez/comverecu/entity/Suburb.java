@@ -37,6 +37,20 @@ public class Suburb implements Serializable {
     @NotNull(message = "El estatus no puede estar vacío")
     private int status;
 
+    @Column(name = "postal_code", nullable = false, length = 5, unique = true)
+    @Size(min = 5, message = "El Código postal debe tener mínimo 5 caracteres")
+    @Size(max = 5, message = "El código postal debe tener máximo 5 caracteres")
+    @NotBlank(message = "El código postal no puede estar vacío")
+    private String postalCode;
+
+    public String getPostalCode() {
+        return postalCode;
+    }
+
+    public void setPostalCode(String postalCode) {
+        this.postalCode = postalCode;
+    }
+
     public Suburb() {
         this.status = 1;
     }

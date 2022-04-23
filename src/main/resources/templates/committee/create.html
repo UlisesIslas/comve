@@ -20,10 +20,13 @@
             <input type="hidden" th:field="*{id}" >
             <div class="modal-body">
                 <div class="form-row">
-
-                    <div class="form-group col">
+                    <div class="col-6">
+                        <label>Nombre</label>
+                        <input type="text" class="form-control" placeholder="Nombre" th:field="*{name}" minlength="2" max="150" required>
+                    </div>
+                    <div class="form-group col-6">
                         <label>Suburbio</label>
-                        <select class="form-control form-control-sm"  th:field="*{suburb.id}">
+                        <select class="form-control"  th:field="*{suburb.id}">
                             <option
                                     th:each="suburb: ${listSuburbs}"
                                     th:value="${suburb.id}"
@@ -33,25 +36,6 @@
                         </select>
                     </div>
                 </div>
-
-
-                <div class="form-group col">
-                    <label style="margin-top: 10px;">Estatus del comité</label><br><br>
-                    <div class="form-check"  style="margin-bottom: 20px;">
-                        <input class="form-check-input" value="1"  type="radio" th:field="*{status}" id="flexRadioDefault1">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            Activo
-                        </label>
-                    </div>
-                    <div class="form-check">
-                        <input class="form-check-input" value="0"  type="radio" th:field="*{status}" id="flexRadioDefault2" >
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Inactivo
-                        </label>
-                    </div>
-                </div>
-
-
                 <div class="card-footer">
                     <div class="row float-right">
                         <div class="col-lg-12 float-right">

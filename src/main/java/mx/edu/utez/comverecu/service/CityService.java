@@ -21,6 +21,10 @@ public class CityService {
         return cityRepository.findAll();
     }
 
+    public List<City> findAllCitiesByStateId(long id) {
+        return cityRepository.findAllCitiesByStateId(id);
+    }
+
     public City findOne(long id) {
         return cityRepository.getById(id);
     }
