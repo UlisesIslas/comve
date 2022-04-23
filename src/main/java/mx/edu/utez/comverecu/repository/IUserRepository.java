@@ -1,4 +1,4 @@
-package mx.edu.utez.comverecu.respository;
+package mx.edu.utez.comverecu.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;

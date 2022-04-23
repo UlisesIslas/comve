@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.edu.utez.comverecu.entity.Roles;
-import mx.edu.utez.comverecu.respository.IRolesRepository;
+import mx.edu.utez.comverecu.repository.IRolesRepository;
 
 @Service
 public class RolesService {

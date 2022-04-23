@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.edu.utez.comverecu.entity.CityLink;
-import mx.edu.utez.comverecu.respository.ICityLinkRepository;
+import mx.edu.utez.comverecu.repository.ICityLinkRepository;
 
 @Service
 public class CityLinkService {

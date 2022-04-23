@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import mx.edu.utez.comverecu.entity.Suburb;
-import mx.edu.utez.comverecu.respository.ISuburbRepository;
+import mx.edu.utez.comverecu.repository.ISuburbRepository;
 
 @Service
 public class SuburbService {

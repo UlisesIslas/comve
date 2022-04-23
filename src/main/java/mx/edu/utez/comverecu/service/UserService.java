@@ -8,7 +8,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import mx.edu.utez.comverecu.entity.Users;
-import mx.edu.utez.comverecu.respository.IUserRepository;
+import mx.edu.utez.comverecu.repository.IUserRepository;
 
 @Service
 public class UserService {
