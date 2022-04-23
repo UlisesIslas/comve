@@ -32,7 +32,6 @@ import mx.edu.utez.comverecu.entity.Users;
 import mx.edu.utez.comverecu.entity.DataTransferObject.RequestDto;
 import mx.edu.utez.comverecu.security.BlacklistController;
 import mx.edu.utez.comverecu.service.CategoryService;
-import mx.edu.utez.comverecu.service.CityLinkService;
 import mx.edu.utez.comverecu.service.CommentaryService;
 import mx.edu.utez.comverecu.service.CommitteePresidentService;
 import mx.edu.utez.comverecu.service.RequestAttachmentsService;

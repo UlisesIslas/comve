@@ -5,6 +5,7 @@ import mx.edu.utez.comverecu.entity.Request;
 import mx.edu.utez.comverecu.entity.Roles;
 import mx.edu.utez.comverecu.entity.Users;
 import mx.edu.utez.comverecu.security.BlacklistController;
+import mx.edu.utez.comverecu.service.CityLinkService;
 import mx.edu.utez.comverecu.service.CommentaryService;
 import mx.edu.utez.comverecu.service.RequestAttachmentsService;
 import mx.edu.utez.comverecu.service.RequestService;
@@ -34,6 +35,8 @@ public class RequestController {
     private CommentaryService commentaryService;
     @Autowired
     RequestAttachmentsService attachmentsService;
+    @Autowired
+    private CityLinkService linkService;
 
     @RequestMapping(value = "/amount/{id}", method = RequestMethod.GET)
     public String amount(Model model, @PathVariable("id") Long id, RedirectAttributes redirectAttributes) {
@@ -97,10 +100,13 @@ public class RequestController {
     }
 
     @RequestMapping(value = "/list", method = RequestMethod.GET)
-    public String findAll(Model model, Pageable pageable) {
-        Page<Request> listRequests = requestService
-                .listarPaginacion(PageRequest.of(pageable.getPageNumber(), 2, Sort.by("startDate").descending()));
-        model.addAttribute("listRequests", listRequests);
+    public String findAll(Model model, Pageable pageable, Authentication authentication, HttpSession session) {
+        Users user = userService.findByUsername(authentication.getName());
+        user.setPassword(null);
+        session.setAttribute("user", user);
+        /*Page<Request> listRequests = requestService
+                .listarPaginacion(PageRequest.of(pageable.getPageNumber(), 2, Sort.by("startDate").descending()));*/
+        model.addAttribute("listRequests", requestService.findAllByCityId(linkService.findByUserId(user.getId()).getCity().getId()));
         return "requests/listRequests";
     }
 
@@ -160,23 +166,23 @@ public class RequestController {
     }
 
     @RequestMapping(value = "/commentary/save/{id}", method = RequestMethod.POST)
-    public String saveCommentary(Model model, Commentary commentaryObject, Authentication authentication,
+    public String saveCommentary(Model model, Commentary commentary, Authentication authentication,
                                  HttpSession session, @PathVariable("id") long id, RedirectAttributes redirectAttributes) {
         Users user = userService.findByUsername(authentication.getName());
         user.setPassword(null);
         session.setAttribute("user", user);
-        commentaryObject.setRequest(requestService.findById(id));
-        if (!BlacklistController.checkBlacklistedWords(commentaryObject.getContent())) {
+        commentary.setRequest(requestService.findById(id));
+        if (!BlacklistController.checkBlacklistedWords(commentary.getContent())) {
             Users tmp = userService.findById(user.getId());
             tmp.setPassword(userService.findPasswordById(tmp.getId()));
             Roles tmpRole = (Roles) tmp.getRoles().toArray()[0];
             if (tmpRole.getAuthority().equals("ROL_PRESIDENTE")) {
-                commentaryObject.setAutor("Presidente");
+                commentary.setAutor("Presidente");
             } else {
-                commentaryObject.setAutor("Enlace");
+                commentary.setAutor("Enlace");
             }
-            commentaryObject.setId(null);
-            boolean res = commentaryService.save(commentaryObject);
+            commentary.setId(null);
+            boolean res = commentaryService.save(commentary);
             if (res) {
                 redirectAttributes.addFlashAttribute("msg_success", "Comentario publicado");
             } else {

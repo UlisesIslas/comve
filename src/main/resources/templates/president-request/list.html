@@ -51,7 +51,7 @@
                                     <td th:text="${tmpRequest.category.name}"></td>
                                     <td>
                                         <p
-                                            th:utext="${tmpRequest.description.length >  10 ? (tmpRequest.description.substring(0, 13) + '...') : tmpRequest.description}">
+                                            th:utext="${tmpRequest.description}" class="text-truncate">
                                         </p>
                                     </td>
                                     <td th:text="${tmpRequest.startDate}"></td>
@@ -98,23 +98,6 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <nav th:if="${requestList2.totalPages > 0}" aria-label="Page navigation example">
-                            <ul class="pagination justify-content-center">
-                                <li class="page-item" th:classappend="${requestList2.number == 0 ? 'disabled' : ''}">
-                                    <a th:href="@{/president/list(page=${requestList2.number - 1})}" class="page-link">Anterior</a>
-                                </li>
-
-                                <li class="page-item" th:classappend="${i eq requestList2.number + 1} ? 'active'"
-                                    th:each="i : ${#numbers.sequence( 1, requestList2.totalPages, 1)}">
-                                    <a class="page-link" th:href="@{/president/list?page={tmpPag} (tmpPag=${i-1}) }" th:text="${i}"
-                                       th:title="${'Page '+ i}" data-toggle="tooltip"></a>
-                                </li>
-                                <li class="page-item"
-                                    th:classappend="${requestList2.number == (requestList2.totalPages - 1) ? 'disabled' : ''}">
-                                    <a th:href="@{/president/list(page=${requestList2.number + 1})}" class="page-link">Siguiente</a>
-                                </li>
-                            </ul>
-                        </nav>
                     </div>
                 </div>
             </div>

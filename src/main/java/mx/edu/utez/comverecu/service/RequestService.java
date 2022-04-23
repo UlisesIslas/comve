@@ -34,6 +34,10 @@ public class RequestService {
         return requestRepository.findAllUnpaidByCommitteeId(id);
     }
 
+    public List<Request> findAllByCityId(long id) {
+        return requestRepository.findAllByCityId(id);
+    }
+
     public Page<Request> listarPaginacion(PageRequest page) {
         return requestRepository.findAll((org.springframework.data.domain.Pageable) page);
     }

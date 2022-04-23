@@ -35,7 +35,7 @@
                     </div>
                 </div>
             </div>
-            <form th:object="${commentaryObject}" th:action="@{/request/commentary/save/{i} (i = ${request.id})}"
+            <form th:object="${commentary}" th:action="@{/request/commentary/save/{i} (i = ${request.id})}"
                 method="POST">
                 <div class="card-footer">
                     <div class="col-12">

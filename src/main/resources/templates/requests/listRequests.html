@@ -48,7 +48,7 @@
                             <td th:text="${tmpRequest.category.name}"></td>
                             <td>
                                 <p
-                                        th:utext="${tmpRequest.description.length > 10 ? (tmpRequest.description.substring(0, 13) + '...') : tmpRequest.description}">
+                                        th:utext="${tmpRequest.description}" class="text-truncate">
                                 </p>
                             </td>
                             <td th:text="${tmpRequest.president.user.name}"></td>
