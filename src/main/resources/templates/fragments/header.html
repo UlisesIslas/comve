@@ -15,7 +15,7 @@
           <a class="nav-link" th:href="@{/category/list}" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">Servicios Publicos</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" th:href="@{/users/list}" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">Enlaces</a>
+          <a class="nav-link" th:href="@{/users/list}" sec:authorize="hasAnyAuthority('ROL_ADMINISTRADOR')">Usuarios</a>
         </li>
         <!--FIN ADMIN-->
         <!--INICIO PRESIDENTE-->
@@ -35,6 +35,9 @@
         </li>
         <li class="nav-item">
           <a class="nav-link" th:href="@{/committee/list}" sec:authorize="hasAnyAuthority('ROL_ENLACE')">Comites</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" th:href="@{/request/presidents}" sec:authorize="hasAnyAuthority('ROL_ENLACE')">Presidentes</a>
         </li>
         <!--FIN ENLACE-->
       </ul>
